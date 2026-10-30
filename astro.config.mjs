@@ -2,10 +2,10 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 // The address the site is served from. A custom domain or a user site is `/`; a project site is its repository name.
-const base = process.env.SITE_BASE ?? '/git-checkout.github.io';
+const base = process.env.SITE_BASE || '/git-checkout.github.io';
 
 export default defineConfig({
-  site: process.env.SITE_URL ?? 'https://save-workspace-as.github.io',
+  site: process.env.SITE_URL || 'https://save-workspace-as.github.io',
   base,
   trailingSlash: 'always',
   integrations: [
