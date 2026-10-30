@@ -3,20 +3,14 @@ import Landing from '../layouts/Landing.astro';
 import Feature from '../components/Feature.astro';
 import Shot from '../components/Shot.astro';
 import { GITHUB, MARKETPLACE, href } from '../site';
+import type { ImageMetadata } from 'astro';
 
-import graph from '../assets/screenshots/01-commit-graph.png';
-import search from '../assets/screenshots/02-graph-search.png';
-import staging from '../assets/screenshots/03-stage-and-unstage.png';
-import details from '../assets/screenshots/04-commit-details.png';
-import tree from '../assets/screenshots/05-file-tree.png';
-import imagePreview from '../assets/screenshots/06-image-preview.png';
-import imageDiff from '../assets/screenshots/07-image-diff.png';
-import history from '../assets/screenshots/08-file-history.png';
-import blame from '../assets/screenshots/09-blame.png';
-import quickLaunch from '../assets/screenshots/10-quick-launch.png';
-import rebase from '../assets/screenshots/11-interactive-rebase.png';
-import merge from '../assets/screenshots/12-merge-conflict.png';
-import stageLines from '../assets/screenshots/13-stage-lines.png';
+
+// The screenshots come from the extension repository, so one that is not there yet is left out instead of breaking the build.
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/screenshots/*.png', { eager: true });
+const pick = (prefix: string): ImageMetadata | undefined =>
+  Object.entries(files).find(([path]) => path.split('/').pop()!.startsWith(`${prefix}-`))?.[1].default;
+const [graph, search, staging, details, tree, imagePreview, imageDiff, history, blame, quickLaunch, rebase, merge, stageLines] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'].map(pick);
 
 const principles = [
   { title: 'Native to VS Code', text: 'It takes your theme, your fonts and your keys. Nothing in it looks or behaves like a guest.' },
@@ -54,7 +48,7 @@ const faq = [
       <a class="button" href={href('/docs/getting-started/')}>Read the docs</a>
     </p>
     <div class="stage">
-      <Shot src={graph} alt="The commit graph with branches, tags and a stash, and the Commit tab beside it" eager />
+      {graph && <Shot src={graph} alt="The commit graph with branches, tags and a stash, and the Commit tab beside it" eager />}
     </div>
   </section>
 
@@ -72,8 +66,8 @@ const faq = [
       A commit graph with branches, tags and stashes. Search by author, path, date, or by the text a commit added or removed,
       and a background fetch keeps it current.
     </p>
-    <Shot src={search} alt="Searching the graph for the commits that touch a path" />
-    <Shot src={details} alt="The files a commit changed, with its diff" />
+    {search && <Shot src={search} alt="Searching the graph for the commits that touch a path" />}
+    {details && <Shot src={details} alt="The files a commit changed, with its diff" />}
   </Feature>
 
   <Feature id="staging" eyebrow="Changes" title="Stage exactly what you mean">
@@ -81,8 +75,8 @@ const faq = [
       Stage a file, a hunk, or only the lines you select, on either side of a side-by-side diff. Commit, amend, or commit and push
       from the same place.
     </p>
-    <Shot src={staging} alt="The Changes tab with an unstaged and a staged list and a diff" />
-    <Shot src={stageLines} alt="Two selected lines of a diff with Stage and Discard Changes buttons beside them" />
+    {staging && <Shot src={staging} alt="The Changes tab with an unstaged and a staged list and a diff" />}
+    {stageLines && <Shot src={stageLines} alt="Two selected lines of a diff with Stage and Discard Changes buttons beside them" />}
   </Feature>
 
   <Feature id="merge" eyebrow="Merging" title="Resolve conflicts side by side">
@@ -90,14 +84,14 @@ const faq = [
       Take the incoming side, the current side or both, for a conflict, a line or the whole file. The result below is an editor
       you can type in, and everything scrolls together.
     </p>
-    <Shot src={merge} alt="The Merge modal with the incoming side, the current side and the result below" />
+    {merge && <Shot src={merge} alt="The Merge modal with the incoming side, the current side and the result below" />}
   </Feature>
 
   <Feature id="rebase" eyebrow="Rewriting history" title="Reorder, squash, reword and drop">
     <p slot="text">
       An interactive rebase you can see. Drag commits into order, preview each one and run it when the plan looks right.
     </p>
-    <Shot src={rebase} alt="The interactive rebase editor with the commits to rebase" />
+    {rebase && <Shot src={rebase} alt="The interactive rebase editor with the commits to rebase" />}
   </Feature>
 
   <Feature id="history" eyebrow="Archaeology" title="Who changed this, and why">
@@ -105,24 +99,24 @@ const faq = [
       The history of a file, a folder or a single hunk, and a blame view that shows who last changed each line of a commit’s
       change.
     </p>
-    <Shot src={history} alt="The history of one file" />
-    <Shot src={blame} alt="A commit’s change with who last changed each line beside it" />
+    {history && <Shot src={history} alt="The history of one file" />}
+    {blame && <Shot src={blame} alt="A commit’s change with who last changed each line beside it" />}
   </Feature>
 
   <Feature id="quick-launch" eyebrow="Speed" title="Every action, one keystroke away">
     <p slot="text">
       Quick Launch lists every repository action and your own commands. Common actions have keys you can turn off or rebind.
     </p>
-    <Shot src={quickLaunch} alt="Quick Launch listing repository actions" />
+    {quickLaunch && <Shot src={quickLaunch} alt="Quick Launch listing repository actions" />}
   </Feature>
 
   <Feature id="files" eyebrow="Files" title="Browse and compare, pictures included">
     <p slot="text">
       Walk the tree of any commit, preview its pictures, and compare two versions of an image side by side.
     </p>
-    <Shot src={tree} alt="The file tree of a commit with a preview" />
-    <Shot src={imagePreview} alt="A picture previewed in the file tree" />
-    <Shot src={imageDiff} alt="Two versions of an image compared" />
+    {tree && <Shot src={tree} alt="The file tree of a commit with a preview" />}
+    {imagePreview && <Shot src={imagePreview} alt="A picture previewed in the file tree" />}
+    {imageDiff && <Shot src={imageDiff} alt="Two versions of an image compared" />}
   </Feature>
 
   <section class="more">
